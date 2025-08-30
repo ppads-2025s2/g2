@@ -1,7 +1,7 @@
-Sistema de Agendamento FAU+D — Casos de Uso
-Escopo: atualização do Sistema de Agendamento das Cortadoras a Laser e criação do Sistema de Agendamento das Impressoras 3D para estudantes da FAU+D.
+Sistema de Agendamento FAU+D 
+Atualização do Sistema de Agendamento das Cortadoras a Laser e criação do Sistema de Agendamento das Impressoras 3D para estudantes da FAU+D.
 
-Parte 1 — Descrição dos Casos de Uso (Fluxos Detalhados)
+Parte 1 — Descrição dos Casos de Uso 
 1) Atores
 Aluno: estudante elegível (Arquitetura/Design; semestres conforme regras).
 Aluno TFG: sub tipo de Aluno com janela prioritária específica.
@@ -9,7 +9,7 @@ Aluno 3º Semestre: sub tipo de Aluno com permissão (Laser) nas mesmas janelas 
 Laboratorista: operador do laboratório; valida arquivos, gerencia fila/horários.
 Serviço de Notificação: componente que envia e mails automatizados.
 Relógio/Agendador do Sistema: rotina que libera vagas e dispara lembretes.
-2) Glossário
+2)Fluxo
 Janela Prioritária (Laser): dias/turnos com prioridade por semestre. TFG: seg/ter/qui. 4º–8º (e 3º sem. de Arquitetura): qua/sex.
 Horário (Laser): bloco fixo de tempo. Reserva permitida até o horário de início.
 Fila (3D): ordem de atendimento sem horário fixo; cada peça tem tempo variável.
