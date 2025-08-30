@@ -1,3 +1,4 @@
+<img width="1637" height="738" alt="diagrama_sistema" src="https://github.com/user-attachments/assets/3bf8801a-34cf-4676-a31c-bfbd87967818" />
 Sistema de Agendamento FAU+D 
 Atualização do Sistema de Agendamento das Cortadoras a Laser e criação do Sistema de Agendamento das Impressoras 3D para estudantes da FAU+D.
 
