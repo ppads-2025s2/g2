@@ -69,7 +69,6 @@ class Notificacao {
 }
 AgendamentoLaser "0..*" --> Notificacao
 SolicitacaoImpressao "0..*" --> Notificacao
-![WhatsApp Image 2025-09-02 at 20 35 21](https://github.com/user-attachments/assets/04f52431-b98d-46b0-abe0-2efdab3d26ec)
 
 class SolicitacaoImpressao {
   +id: String
@@ -144,3 +143,5 @@ madrugada e fins de semana (máquinas indisponíveis).
 Cancelamento só se status = NA_FILA.
 end note
 @enduml
+
+![WhatsApp Image 2025-09-02 at 20 35 21](https://github.com/user-attachments/assets/04f52431-b98d-46b0-abe0-2efdab3d26ec)
