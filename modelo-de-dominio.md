@@ -69,8 +69,8 @@ class Notificacao {
 }
 AgendamentoLaser "0..*" --> Notificacao
 SolicitacaoImpressao "0..*" --> Notificacao
+![WhatsApp Image 2025-09-02 at 20 35 21](https://github.com/user-attachments/assets/04f52431-b98d-46b0-abe0-2efdab3d26ec)
 
-' ---------- FILA 3D ----------
 class SolicitacaoImpressao {
   +id: String
   +dataCriacao: DateTime
