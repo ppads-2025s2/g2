@@ -2,17 +2,9 @@
 
 O aluno solicita cancelamento; se faltar ≥ 1h, a vaga é liberada e os interessados são notificados. Se faltar < 1h, exibe orientação.
 
----
-
-![Wireframe L4](L4_cancelar_laser_1.png)  
 Legenda: Tela 1 — Cancelamento permitido (≥1h antes).
 
----
-
-![Wireframe L4](L4_cancelar_laser_2.png)  
 Legenda: Tela 2 — Cancelamento negado (faltam <1h).
-
----
 
 *Interação do usuário:*  
 1. Solicita cancelamento da reserva.  
