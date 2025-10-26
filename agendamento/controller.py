@@ -1,49 +1,57 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
-from .service import AgendamentoService
-from .models import AgendamentoCreate
+from typing import Optional, List
 from database.config import get_db
 from autentication.service import get_current_user
+from typing import Annotated
+from autentication.models import TokenData
 
-router = APIRouter(
-    prefix="/agendamentos",
-    tags=["Agendamentos"]
+from agendamento.models import AgendamentoCreate, AgendamentoRead, AgendamentoUpdate
+from agendamento.service import (
+    get_agendamento, list_agendamentos, create_agendamento, update_agendamento, delete_agendamento
 )
 
-@router.get("/")
-def listar_agendamentos(
-    db: Session = Depends(get_db)
-):
-    service = AgendamentoService(db)
-    return service.listar_agendamentos()
+router = APIRouter()
 
-@router.post("/")
-def criar_agendamento(
+@router.get("", response_model=List[AgendamentoRead])
+def listar_agendamentos(
+    db: Session = Depends(get_db),
+    current_user: Annotated[TokenData, Depends(get_current_user)] = None,
+):
+    return list_agendamentos(db)
+
+@router.post("", response_model=AgendamentoRead, status_code=status.HTTP_201_CREATED)
+def criar(
     horas_necessarias: int = 1,
     db: Session = Depends(get_db),
-    usuario_atual = Depends(get_current_user)
+    current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
-    service = AgendamentoService(db)
-    return service.criar_agendamento(usuario_atual, horas_necessarias)
+    return create_agendamento(db, current_user, horas_necessarias)
 
-@router.get("/{agendamento_id}")
-def obter_agendamento(
+@router.get("/{agendamento_id}", response_model=AgendamentoRead)
+def obter(
     agendamento_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
-    service = AgendamentoService(db)
-    agendamento = service.obter_agendamento(agendamento_id)
-    if not agendamento:
-        raise HTTPException(status_code=404, detail="Agendamento não encontrado")
-    return agendamento
+    return get_agendamento(db, agendamento_id)
 
 @router.delete("/{agendamento_id}")
-def cancelar_agendamento(
+def cancelar(
     agendamento_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
-    service = AgendamentoService(db)
-    sucesso = service.cancelar_agendamento(agendamento_id)
-    if not sucesso:
+    ok = delete_agendamento(db, agendamento_id)
+    if not ok:
         raise HTTPException(status_code=404, detail="Agendamento não encontrado")
     return {"mensagem": "Agendamento cancelado com sucesso"}
+
+@router.patch("/{agendamento_id}", response_model=AgendamentoRead)
+def atualizar(
+    agendamento_id: int,
+    body: AgendamentoUpdate,
+    db: Session = Depends(get_db),
+    current_user: Annotated[TokenData, Depends(get_current_user)] = None,
+):
+    return update_agendamento(db, agendamento_id, body.dict(exclude_unset=True))

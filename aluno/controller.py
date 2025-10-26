@@ -2,7 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session
 from typing import List, Optional
 from database.config import get_db
-from entities.alunos import Aluno, AlunoCreate, AlunoRead, AlunoUpdate
+from entities.alunos import Aluno
+from aluno.models import AlunoCreate, AlunoRead, AlunoUpdate
 from aluno.service import (
     get_aluno,
     get_alunos,
@@ -37,9 +38,8 @@ async def listar_alunos(
     """
     return get_alunos(db, skip=skip, limit=limit, curso=curso)
 
-@router.get("/{aluno_id}", response_model=AlunoRead)
+@router.get("/{aluno_id}", response_model=Aluno)
 async def buscar_aluno(
-    *,
     aluno_id: int,
     db: Session = Depends(get_db),
     current_user: Annotated[TokenData, Depends(get_current_user)] = None
@@ -51,12 +51,12 @@ async def buscar_aluno(
     """
     return get_aluno(db, aluno_id)
 
-@router.post("", response_model=AlunoRead, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=Aluno, status_code=status.HTTP_201_CREATED)
 async def criar_aluno(
     *,
     db: Session = Depends(get_db),
     current_user: Annotated[TokenData, Depends(get_current_user)] = None,
-    aluno: AlunoCreate
+    aluno: Aluno
 ):
     """
     Cria um novo aluno.
@@ -65,7 +65,7 @@ async def criar_aluno(
     """
     return create_aluno(db, aluno)
 
-@router.patch("/{aluno_id}", response_model=AlunoRead)
+@router.patch("/{aluno_id}", response_model=Aluno)
 async def atualizar_aluno(
     *,
     db: Session = Depends(get_db),
@@ -80,9 +80,8 @@ async def atualizar_aluno(
     """
     return update_aluno(db, aluno_id, aluno_data.dict(exclude_unset=True))
 
-@router.delete("/{aluno_id}", response_model=AlunoRead)
+@router.delete("/{aluno_id}", response_model=Aluno)
 async def remover_aluno(
-    *,
     aluno_id: int,
     db: Session = Depends(get_db),
     current_user: Annotated[TokenData, Depends(get_current_user)] = None

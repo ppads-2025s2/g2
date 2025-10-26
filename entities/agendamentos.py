@@ -1,20 +1,12 @@
-from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional
-from datetime import date, time, datetime
-from enum import Enum
+from datetime import datetime
+from sqlmodel import SQLModel, Field
 
-class StatusAgendamento(str, Enum):
-    PENDENTE = 1 
-    CONFIRMADO = 2
-    EM_ANDAMENTO = 3
-    CONCLUIDO = 4
-    CANCELADO = 5
-
-class AgendamentoBase(SQLModel):
-    id: int = Field(default=None, primary_key=True)
-    aluno_id: int = Field(nullable=False)
-    data: date
-    hora_inicio: time
-    hora_fim: time
-    status: Optional[StatusAgendamento] = Field(default=StatusAgendamento.PENDENTE)
-
+class Agendamento(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    aluno_id: int = Field(foreign_key="aluno.id", index=True)
+    data_inicio: datetime
+    data_fim: datetime
+    horas_necessarias: int = 1
+    status: str = Field(default="pendente", max_length=20)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime | None = Field(default=None, nullable=True)

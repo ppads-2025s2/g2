@@ -50,7 +50,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def authenticate_user(email: str, password: str, db: Session) -> Aluno | None:
     try:
         user = db.exec(select(Aluno).where(Aluno.email == email)).first()
-        if not user or not verify_password(password, user.senha):
+        if not user or not verify_password(password, user.senha_hash):
             logging.warning(f"Erro de autenticação no email: {email}")
             return None
         return user
@@ -125,14 +125,15 @@ def register_user(register_data: RegisterRequest, db: Session) -> RegisterRespon
         # Hash the password
         hashed_password = get_password_hash(register_data.senha)
         
-        # Create new aluno instance
+        # Create new aluno instance with current timestamp for updated_at
         aluno = Aluno(
             email=register_data.email,
             nome=register_data.nome,
             tia=register_data.tia,
             curso=register_data.curso,
             semestre=register_data.semestre,
-            senha=hashed_password
+            senha_hash=hashed_password,
+            updated_at=datetime.now(timezone.utc)  # Set the initial updated_at timestamp
         )
         
         db.add(aluno)

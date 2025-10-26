@@ -1,13 +1,18 @@
-from fastapi import FastAPI, HTTPException, APIRouter, Depends, Security
-from autentication.controller import router as auth_router
-from sqlmodel import SQLModel
-from database.config import engine, get_db
-from entities.alunos import Aluno
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import HTTPBearer
+from fastapi.openapi.utils import get_openapi
 
-SQLModel.metadata.create_all(engine)
+from sqlmodel import SQLModel
+from database.config import create_db_and_tables  # usa a função do seu config
 
+# Routers
+from autentication.controller import router as auth_router
+from aluno.controller import router as aluno_router
+from agendamento.controller import router as agendamento_router
+
+# ----------------------------------------------------------------------
+# APP
+# ----------------------------------------------------------------------
 app = FastAPI(
     title="Backend API",
     description="API de Backend com autenticação e gerenciamento de alunos",
@@ -15,12 +20,27 @@ app = FastAPI(
     swagger_ui_parameters={"defaultModelsExpandDepth": 0},
     openapi_tags=[
         {"name": "Authentication", "description": "Operações de autenticação"},
-        {"name": "Alunos", "description": "Operações relacionadas a alunos"}
+        {"name": "Alunos", "description": "Operações relacionadas a alunos"},
+        {"name": "Agendamentos", "description": "Operações de agendamento"},
     ],
+    # você já usa este campo; manteremos e aplicaremos no openapi custom
     openapi_security=[{"bearerAuth": []}],
 )
 
-# Configuração CORS
+# Mantém sua definição de componentes para o Bearer
+app.openapi_components = {
+    "securitySchemes": {
+        "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT",
+        }
+    }
+}
+
+# ----------------------------------------------------------------------
+# CORS (mantido conforme você configurou)
+# ----------------------------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -29,23 +49,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Importa o router de alunos
-from aluno.controller import router as aluno_router
+# ----------------------------------------------------------------------
+# Startup: criar tabelas
+# ----------------------------------------------------------------------
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()  # cria se não existir (mantém seu comportamento)
 
-# Configuração do esquema de segurança Bearer
-app.add_middleware(CORSMiddleware)  # Keep CORS configuration
+# ----------------------------------------------------------------------
+# OpenAPI custom para aplicar suas configs (openapi_components + openapi_security)
+# ----------------------------------------------------------------------
+def custom_openapi():
+    if app.openapi_schema:
+        return app.openapi_schema
 
-app.openapi_components = {
-    "securitySchemes": {
-        "bearerAuth": {
-            "type": "http",
-            "scheme": "bearer",
-            "bearerFormat": "JWT"
-        }
-    }
-}
+    schema = get_openapi(
+        title=app.title,
+        version=app.version,
+        description=app.description,
+        routes=app.routes,
+    )
 
-# Inclui os routers na aplicação
+    # aplica componentes definidos por você
+    if hasattr(app, "openapi_components"):
+        comps = app.openapi_components or {}
+        schema.setdefault("components", {}).update(comps)
+
+    # aplica segurança global definida por você
+    if hasattr(app, "openapi_security"):
+        schema["security"] = app.openapi_security or []
+
+    app.openapi_schema = schema
+    return app.openapi_schema
+
+app.openapi = custom_openapi
+
+# ----------------------------------------------------------------------
+# Rotas (mantidas)
+# ----------------------------------------------------------------------
 app.include_router(
     auth_router,
     prefix="/api/auth",
@@ -57,12 +98,19 @@ app.include_router(
     aluno_router,
     prefix="/api/alunos",
     tags=["Alunos"],
-    responses={401: {"description": "Não autorizado"}}
+    responses={401: {"description": "Não autorizado"}},
 )
 
+app.include_router(
+    agendamento_router,
+    prefix="/api/agendamentos",
+    tags=["Agendamentos"],
+    responses={401: {"description": "Não autorizado"}},
+)
+
+# ----------------------------------------------------------------------
+# Root
+# ----------------------------------------------------------------------
 @app.get("/", tags=["Root"])
-async def root():
-    """
-    Endpoint raiz para verificar se a API está funcionando.
-    """
+def root():
     return {"message": "API is running"}

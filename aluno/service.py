@@ -1,5 +1,7 @@
+# aluno/service.py
 from sqlmodel import Session, select
-from entities.alunos import Aluno, AlunoCreate, AlunoUpdate
+from aluno.models import AlunoCreate, AlunoUpdate
+from entities.alunos import Aluno
 from fastapi import HTTPException, status
 from typing import List
 from sqlalchemy.exc import IntegrityError
@@ -8,9 +10,6 @@ from passlib.context import CryptContext
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_aluno(db: Session, aluno_id: int) -> Aluno:
-    """
-    Busca um aluno pelo ID
-    """
     statement = select(Aluno).where(Aluno.id == aluno_id)
     aluno = db.exec(statement).first()
     if not aluno:
@@ -20,29 +19,21 @@ def get_aluno(db: Session, aluno_id: int) -> Aluno:
         )
     return aluno
 
-def get_aluno_by_email(db: Session, email: str) -> Aluno:
-    """
-    Busca um aluno pelo email
-    """
+def get_aluno_by_email(db: Session, email: str) -> Aluno | None:
     statement = select(Aluno).where(Aluno.email == email)
     return db.exec(statement).first()
 
-def get_aluno_by_tia(db: Session, tia: int) -> Aluno:
-    """
-    Busca um aluno pelo TIA
-    """
-    statement = select(Aluno).where(Aluno.tia == tia)
+def get_aluno_by_tia(db: Session, tia: int) -> Aluno | None:
+    # tia no banco é VARCHAR, então compare como string
+    statement = select(Aluno).where(Aluno.tia == str(tia))
     return db.exec(statement).first()
 
 def get_alunos(
     db: Session, 
     skip: int = 0, 
     limit: int = 100,
-    curso: str = None
+    curso: str | None = None
 ) -> List[Aluno]:
-    """
-    Lista todos os alunos com paginação e filtro opcional por curso
-    """
     statement = select(Aluno)
     if curso:
         statement = statement.where(Aluno.curso == curso)
@@ -50,10 +41,7 @@ def get_alunos(
     return db.exec(statement).all()
 
 def create_aluno(db: Session, aluno_create: AlunoCreate) -> Aluno:
-    """
-    Cria um novo aluno
-    """
-    # Verifica se já existe aluno com mesmo email ou TIA
+    # Verifica duplicidade
     if get_aluno_by_email(db, aluno_create.email):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -66,11 +54,16 @@ def create_aluno(db: Session, aluno_create: AlunoCreate) -> Aluno:
         )
     
     try:
-        # Hash da senha antes de salvar
-        aluno_dict = aluno_create.dict()
-        aluno_dict["senha"] = pwd_context.hash(aluno_create.senha)
-        aluno = Aluno(**aluno_dict)
-        
+        aluno = Aluno(
+            email=aluno_create.email,
+            nome=aluno_create.nome,
+            tia=str(aluno_create.tia),                 # <- converte int -> str
+            curso=aluno_create.curso,
+            semestre=aluno_create.semestre,
+            doing_tcc=aluno_create.doing_tcc,
+            active=aluno_create.active,
+            senha_hash=pwd_context.hash(aluno_create.senha),
+        )
         db.add(aluno)
         db.commit()
         db.refresh(aluno)
@@ -83,12 +76,9 @@ def create_aluno(db: Session, aluno_create: AlunoCreate) -> Aluno:
         )
 
 def update_aluno(db: Session, aluno_id: int, aluno_data: dict) -> Aluno:
-    """
-    Atualiza os dados de um aluno
-    """
     aluno = get_aluno(db, aluno_id)
     
-    # Se estiver atualizando email ou TIA, verifica se já existe
+    # Verifica duplicidade em email/tia
     if "email" in aluno_data and aluno_data["email"] != aluno.email:
         existing_aluno = get_aluno_by_email(db, aluno_data["email"])
         if existing_aluno and existing_aluno.id != aluno_id:
@@ -97,17 +87,19 @@ def update_aluno(db: Session, aluno_id: int, aluno_data: dict) -> Aluno:
                 detail="Email já cadastrado"
             )
     
-    if "tia" in aluno_data and aluno_data["tia"] != aluno.tia:
+    if "tia" in aluno_data and str(aluno_data["tia"]) != aluno.tia:
         existing_aluno = get_aluno_by_tia(db, aluno_data["tia"])
         if existing_aluno and existing_aluno.id != aluno_id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="TIA já cadastrado"
             )
+        # garanta que ficará como string no modelo
+        aluno_data["tia"] = str(aluno_data["tia"])
     
-    # Se estiver atualizando a senha, faz o hash
+    # Hash de senha → senha_hash
     if "senha" in aluno_data:
-        aluno_data["senha"] = pwd_context.hash(aluno_data["senha"])
+        aluno_data["senha_hash"] = pwd_context.hash(aluno_data.pop("senha"))
     
     try:
         for key, value in aluno_data.items():
@@ -123,9 +115,6 @@ def update_aluno(db: Session, aluno_id: int, aluno_data: dict) -> Aluno:
         )
 
 def delete_aluno(db: Session, aluno_id: int) -> Aluno:
-    """
-    Remove um aluno
-    """
     aluno = get_aluno(db, aluno_id)
     try:
         db.delete(aluno)
