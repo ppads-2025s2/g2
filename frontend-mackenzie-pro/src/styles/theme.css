@@ -1,0 +1,67 @@
+:root{
+  --brand: #E80C0C;
+  --brand-ink: #B40909;
+  --bg: #FFFFFF;
+  --ink: #1B1B1B;
+  --muted: #6B7280;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(184, 9, 9, .12);
+  --border: #ececf1;
+  --soft: #fff5f5;
+}
+*{ box-sizing: border-box; }
+html, body, #root{ height: 100%; }
+body{
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+a{ color: inherit; text-decoration: none; }
+.container{ max-width: 1180px; margin: 0 auto; padding: 24px; }
+
+.header{
+  background: #fff;
+  border-bottom: 4px solid var(--brand);
+  box-shadow: var(--shadow);
+  position: sticky; top: 0; z-index: 10;
+}
+.header-inner{ display:flex; align-items:center; gap:16px; padding: 12px 20px; }
+.brand{ display:flex; align-items:center; gap:12px; }
+.brand img{ width:40px; height:40px; object-fit:contain; }
+.brand h1{ font-size: 18px; margin:0; font-weight: 800; letter-spacing:.3px; }
+nav{ display:flex; gap:10px; }
+.navlink{
+  padding:8px 12px; border-radius: 10px; border:2px solid transparent;
+}
+.navlink.active, .navlink:hover{
+  background: var(--soft); border-color: var(--brand);
+}
+.spacer{ flex:1; }
+.logout{
+  border:2px solid var(--brand); background:#fff; color:var(--brand);
+  padding:8px 14px; border-radius: 999px; font-weight: 700; cursor:pointer;
+}
+.logout:hover{ background: var(--brand); color:#fff; }
+
+.card{
+  background:#fff; border: 2px solid var(--border); border-radius: var(--radius);
+  padding: 18px; box-shadow: var(--shadow);
+}
+.row{ display:flex; gap:16px; flex-wrap:wrap; align-items:center; }
+.btn{
+  display:inline-flex; align-items:center; gap:8px;
+  padding: 10px 16px; border-radius: 10px; border:none; cursor:pointer;
+  background: var(--brand); color:#fff; font-weight: 700;
+}
+.btn.outline{ background:#fff; color: var(--brand); border:2px solid var(--brand); }
+.btn:disabled{ opacity:.6; cursor:not-allowed; }
+
+.table{ width:100%; border-collapse: collapse; border:2px solid var(--border); border-radius: var(--radius); overflow:hidden; }
+.table th, .table td{ padding:12px 10px; text-align:left; border-bottom:1px solid #f3f4f6; }
+.table thead th{ background:#fff5f5; color: var(--brand-ink); font-weight:800; }
+
+input, select{
+  border:2px solid #e9e9f0; border-radius: 10px; padding:10px 12px; min-width: 220px;
+}
+.muted{ color: var(--muted); font-size: 14px; }
