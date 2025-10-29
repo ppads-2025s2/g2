@@ -35,7 +35,7 @@ def obter(
     current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
     ag = get_agendamento(db, agendamento_id)
-    if ag.aluno_id != current_user.id and not getattr(current_user, "admin", False):
+    if ag.aluno_id != current_user.aluno_id and not getattr(current_user, "admin", False):
         raise HTTPException(status_code=403, detail="Sem permissão")
     return ag
 
@@ -46,7 +46,7 @@ def cancelar(
     current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
     ag = get_agendamento(db, agendamento_id)
-    if ag.aluno_id != current_user.id and not getattr(current_user, "admin", False):
+    if ag.aluno_id != current_user.aluno_id and not getattr(current_user, "admin", False):
         raise HTTPException(status_code=403, detail="Sem permissão")
 
     ok = delete_agendamento(db, agendamento_id)
@@ -62,7 +62,7 @@ def atualizar(
     current_user: Annotated[TokenData, Depends(get_current_user)] = None,
 ):
     ag = get_agendamento(db, agendamento_id)
-    if ag.aluno_id != current_user.id and not getattr(current_user, "admin", False):
+    if ag.aluno_id != current_user.aluno_id and not getattr(current_user, "admin", False):
         raise HTTPException(status_code=403, detail="Sem permissão")
 
     return update_agendamento(db, agendamento_id, body.dict(exclude_unset=True))

@@ -70,7 +70,7 @@ def get_next_start_time(db_session: Session, hour_number: int, is_tfg: bool) -> 
     raise HTTPException(status_code=404, detail="Não foi possível encontrar horário disponível")
 
 def create_agendamento(db_session: Session, current_user, hour_number: int) -> Agendamento:
-    aluno = db_session.get(Aluno, current_user.id)
+    aluno = db_session.get(Aluno, current_user.aluno_id)
     if not aluno:
         raise HTTPException(status_code=404, detail="Aluno não encontrado")
 
@@ -83,7 +83,7 @@ def create_agendamento(db_session: Session, current_user, hour_number: int) -> A
         raise HTTPException(status_code=400, detail="Horário fora do período permitido")
 
     ag = Agendamento(
-        aluno_id=current_user.id,
+        aluno_id=current_user.aluno_id,
         data_inicio=inicio,
         data_fim=fim,
         horas_necessarias=hour_number,
