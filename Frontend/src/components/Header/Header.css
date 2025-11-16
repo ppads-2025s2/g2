@@ -1,0 +1,52 @@
+.header {
+  background-color: var(--white);
+  border-bottom: 2px solid var(--mackenzie-red);
+  padding: 10px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--mackenzie-red);
+  text-decoration: none;
+}
+
+.header nav {
+  display: flex;
+  align-items: center;
+}
+
+.header nav a {
+  margin: 0 15px;
+  text-decoration: none;
+  color: var(--default-grey);
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.header nav a:hover {
+  color: var(--mackenzie-red);
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: 2px solid var(--mackenzie-red);
+  color: var(--mackenzie-red);
+  padding: 8px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.btn-logout:hover {
+  background-color: var(--mackenzie-red);
+  color: var(--white);
+}

@@ -1,0 +1,58 @@
+/* Paleta baseada no site do Mackenzie */
+:root {
+  --mackenzie-red: #CC0000;
+  --mackenzie-red-dark: #A60000;
+  --default-grey: #333333;
+  --light-grey: #f4f4f4;
+  --white: #FFFFFF;
+  --error-red: #D8000C;
+  --success-green: #270;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: var(--default-grey);
+  background-color: #f9f9f9;
+}
+
+/* Layout principal */
+.container {
+  max-width: 1100px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Botão padrão */
+.btn-primary {
+  background-color: var(--mackenzie-red);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  margin: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--mackenzie-red-dark);
+}
+
+/* Mensagens */
+.error {
+  color: var(--error-red);
+  background-color: #ffd2d2;
+  padding: 10px;
+  border-radius: 5px;
+}
+.success {
+  color: var(--success-green);
+  background-color: #d4edda;
+  padding: 10px;
+  border-radius: 5px;
+}
