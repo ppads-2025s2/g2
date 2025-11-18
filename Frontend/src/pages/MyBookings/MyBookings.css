@@ -15,6 +15,7 @@
 
 .booking-list h3 {
   color: var(--default-grey);
+  margin-bottom: 10px;
 }
 
 .booking-list ul {
@@ -30,4 +31,38 @@
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   line-height: 1.6;
+ 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px; /* Espaço mínimo entre texto e botão */
+}
+
+.btn-cancel {
+  background-color: #ff4d4d; /* Vermelho alerta */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  white-space: nowrap; /* Evita que o texto do botão quebre */
+}
+
+.btn-cancel:hover {
+  background-color: #cc0000; /* Vermelho mais escuro ao passar o mouse */
+}
+
+
+@media (max-width: 480px) {
+  .booking-list li {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .btn-cancel {
+    width: 100%; 
+    margin-top: 10px;
+  }
 }

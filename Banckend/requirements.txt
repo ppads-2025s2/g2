@@ -1,0 +1,9 @@
+fastapi[standard]
+uvicorn[standard]
+sqlalchemy
+mysql-connector-python
+passlib[bcrypt,argon2]
+argon2-cffi
+python-jose[cryptography]
+python-multipart
+pydantic-settings
