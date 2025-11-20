@@ -1,0 +1,227 @@
+/* --- Variáveis Locais (Garantia de Cores) --- */
+:root {
+  --mackenzie-red: #D32F2F;
+  --mackenzie-dark-red: #b71c1c;
+  --white: #ffffff;
+  --gray-bg: #f3f4f6;
+  --gray-border: #d1d5db;
+  --text-dark: #111827;
+  --text-muted: #6b7280;
+  --green-success: #166534;
+  --green-bg: #f0fdf4;
+  --red-error: #991b1b;
+  --red-bg: #fef2f2;
+}
+
+/* Fundo Escuro (Overlay) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 16px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Container do Modal (Cartão) */
+.modal-card {
+  background-color: var(--white);
+  width: 100%;
+  max-width: 480px;
+  border-radius: 4px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  position: relative;
+  border-top: 4px solid var(--mackenzie-red); /* Borda Vermelha no Topo */
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+/* Botão Fechar (X) */
+.btn-close-modal {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.btn-close-modal:hover {
+  color: var(--mackenzie-red);
+}
+
+/* Conteúdo Interno */
+.modal-content {
+  padding: 32px;
+}
+
+/* Título */
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  letter-spacing: 0.025em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-title {
+  color: var(--mackenzie-red);
+}
+
+/* Descrição */
+.modal-description {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--gray-border);
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* Input de Arquivo Customizado */
+.form-group {
+  margin-bottom: 24px;
+}
+
+.label-input {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.file-input {
+  display: block;
+  width: 100%;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  border: 1px solid var(--gray-border);
+  background-color: var(--gray-bg);
+  cursor: pointer;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.file-input:focus {
+  outline: 2px solid var(--mackenzie-red);
+  outline-offset: -2px;
+}
+
+/* Estilo do Botão "Escolher Arquivo" do navegador */
+.file-input::file-selector-button {
+  margin-right: 16px;
+  padding: 12px 16px;
+  border: none;
+  background-color: #e5e7eb;
+  color: var(--text-dark);
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-size: 0.7rem;
+  transition: all 0.2s;
+}
+
+.file-input:hover::file-selector-button {
+  background-color: var(--mackenzie-red);
+  color: var(--white);
+}
+
+/* Mensagens de Feedback */
+.message-box {
+  margin-bottom: 24px;
+  padding: 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-left: 4px solid;
+  letter-spacing: 0.05em;
+}
+
+.message-box.success {
+  background-color: var(--green-bg);
+  color: var(--green-success);
+  border-color: var(--green-success);
+}
+
+.message-box.error {
+  background-color: var(--red-bg);
+  color: var(--red-error);
+  border-color: var(--mackenzie-red);
+}
+
+/* Ações (Botões) */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.btn-cancel, .btn-confirm {
+  flex: 1;
+  padding: 12px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.btn-cancel {
+  background-color: transparent;
+  border: 1px solid var(--gray-border);
+  color: var(--text-muted);
+}
+
+.btn-cancel:hover {
+  background-color: var(--gray-bg);
+  color: var(--text-dark);
+}
+
+.btn-confirm {
+  background-color: var(--mackenzie-red);
+  color: var(--white);
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-confirm:hover:not(:disabled) {
+  background-color: var(--mackenzie-dark-red);
+  transform: translateY(-1px);
+}
+
+.btn-confirm:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

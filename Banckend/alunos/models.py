@@ -14,6 +14,7 @@ class UsuarioPublic(BaseModel):
     email: EmailStr
     curso: CursoEnum
     semestre: int
+    eh_aluno_tcc: bool  # Campo adicional para indicar se é aluno de TCC
 
     class Config:
         orm_mode = True # Converte o modelo SQLAlchemy para Pydantic
@@ -25,3 +26,4 @@ class UsuarioUpdate(BaseModel):
     password: str | None = None
     curso: CursoEnum | None = None
     semestre: int | None = None
+

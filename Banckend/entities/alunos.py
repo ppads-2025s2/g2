@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Enum, ForeignKey
+from sqlalchemy import Column, Integer, String, Enum, ForeignKey,Boolean
 from sqlalchemy.orm import relationship
 from database.database import Base
 import enum
@@ -17,6 +17,7 @@ class Usuario(Base):
     password_hash = Column(String(255), nullable=False)
     curso = Column(Enum(CursoEnum), nullable=False)
     semestre = Column(Integer, nullable=False)
+    eh_aluno_tcc = Column(Boolean, default=False)
 
     # Relacionamento: Um usuário pode ter vários agendamentos
     agendamentos = relationship("Agendamento", back_populates="usuario")

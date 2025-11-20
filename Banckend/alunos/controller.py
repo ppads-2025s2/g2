@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File
 from sqlalchemy.orm import Session
 from database.database import get_db
 from alunos.models import UsuarioCreate, UsuarioPublic, UsuarioUpdate
@@ -70,3 +70,18 @@ def deletar_usuario(usuario_id: int, db: Session = Depends(get_db), usuario: Usu
         raise HTTPException(status_code=403, detail="Sem permissão")
     service_deletar_usuario(db, usuario_id)
     return {"detail": "Usuário deletado"}
+
+@router.post("/validar-tcc")
+async def validar_tcc_endpoint(
+    file: UploadFile = File(...), 
+    db: Session = Depends(get_db), 
+    usuario: Usuario = Depends(get_usuario_logado)
+):
+    """
+    Recebe um CSV, verifica se é aluno de TCC (7º semestre+) 
+    e libera o acesso especial.
+    """
+    # Importar a nova função do service (se não tiver importado no topo)
+    from alunos.service import service_validar_tcc
+    
+    return await service_validar_tcc(db, usuario.id, file)
