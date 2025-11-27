@@ -22,7 +22,7 @@ Para executar o projeto, o servidor ou máquina host deve atender aos seguintes 
 A aplicação é conteinerizada e dividida em três serviços principais orquestrados pelo Docker Compose:
 
 1.  **Backend (API):** Python (Flask/FastAPI/Django) expondo endpoints REST.
-2.  **Frontend (Client):** React.js servido via Nginx ou Node server.
+2.  **Frontend (Client):** React.js servido via Node server.
 3.  **Database:** MariaDB para persistência de dados (usuários, agendamentos, logs).
 
 ## 3. Configuração de Variáveis de Ambiente
