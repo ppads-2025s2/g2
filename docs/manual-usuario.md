@@ -34,7 +34,7 @@ Para reservar uma máquina (Impressora 3D ou Cortadora a Laser):
 
 1. No menu lateral, clique em **"Novo Agendamento"**.
 2. **Comprovação de TCC (Se aplicável):**
-   - Caso você esteja nos semestres de TCC (7º, 8º ou 9º), é obrigatório fazer o upload do comprovante.
+   - Caso você esteja nos semestres de TCC (7º, 8º, 9º e 10º), é obrigatório fazer o upload do comprovante.
    - Arraste ou selecione o arquivo no formato **.csv** no campo indicado.
 3. **Seleção de Horário:**
    - O calendário mostrará apenas os dias permitidos para o seu perfil.
