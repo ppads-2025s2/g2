@@ -28,7 +28,7 @@ Sistema desenvolvido para facilitar o agendamento e gerenciamento do uso de equi
 ## Containers com Docker Compose:
 docker-compose up --build
 
-## cesso da aplicação:
+## Acesso da aplicação:
 rontend (Sistema): (http://localhost:5173/) (ou a porta que você configurou)
 
 Documentação da API (Swagger): [http://localhost:8000/docs](http://127.0.0.1:8000/docs)
