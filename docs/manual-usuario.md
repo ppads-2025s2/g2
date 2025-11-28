@@ -45,7 +45,7 @@ Para reservar uma máquina (Impressora 3D ou Cortadora a Laser):
 ### 2.4 Acompanhamento e Histórico
 Acesse **"Meus Agendamentos"** para ver o status e o histórico de suas reservas:
 
-- **Pendente:** O agendamento foi realizado, mas aguarda a verificação do comprovante de TCC pelo monitor (para alunos de 7º a 9º semestre).
+- **Pendente:** O agendamento foi realizado, mas aguarda a verificação do comprovante de TCC pelo monitor (para alunos de 7º a 10º semestre).
 - **Confirmado:** Seu horário está garantido. Compareça ao laboratório com antecedência.
 - **Concluído:** O horário agendado já passou e o uso foi registrado no histórico.
 - **Cancelamento:** O horário agendado foi cancelado.
