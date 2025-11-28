@@ -1,14 +1,18 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware  # O CORS correto
+from fastapi.middleware.cors import CORSMiddleware
+
+# --- IMPORTS NECESSÁRIOS PARA O BANCO DE DADOS ---
+from database.database import engine, Base
+from entities.alunos import Usuario 
 
 # --- Importações das suas rotas ---
 from alunos.controller import router as aluno_router
 from agendamentos.controller import router as agendamento_router
 from auth.controller import router as autenticacao_router
 
-# ------------------------------------
-# (Todas as linhas "from flask..." foram removidas)
-# ------------------------------------
+# --- CRIAÇÃO DAS TABELAS (O PULO DO GATO) ---
+# Isso cria as tabelas automaticamente se elas não existirem ao iniciar o app
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Sistema de Gerenciamento de Impressoras 3D e Laser",

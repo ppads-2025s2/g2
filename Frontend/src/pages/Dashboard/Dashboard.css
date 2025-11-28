@@ -1,0 +1,314 @@
+/* --- Variáveis Globais do Dashboard --- */
+:root {
+  --mackenzie-red: #D32F2F;
+  --mackenzie-dark-red: #b71c1c;
+  --white: #ffffff;
+  --gray-light: #f9fafb;
+  --gray-border: #e5e7eb;
+  --text-dark: #111827;
+  --text-gray: #4b5563;
+  --green-success: #15803d;
+  --green-bg: #f0fdf4;
+  --blue-info: #1e40af;
+  --blue-bg: #eff6ff;
+}
+
+/* --- Layout Principal --- */
+.dashboard-page {
+  min-height: 100vh;
+  background-color: var(--white);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: var(--text-dark);
+}
+
+.brand-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--mackenzie-red);
+}
+
+.dashboard-container {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+/* --- Cabeçalho (Header) --- */
+.dashboard-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--gray-border);
+  margin-bottom: 48px;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .dashboard-header {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+.greeting-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+}
+
+.text-highlight {
+  color: var(--mackenzie-red);
+  text-transform: capitalize;
+}
+
+/* Badges de Informação (Curso/Semestre) */
+.user-info-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-gray);
+  letter-spacing: 0.025em;
+}
+
+.info-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--gray-light);
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--gray-border);
+}
+
+.icon-red {
+  color: var(--mackenzie-red);
+  width: 20px;
+  height: 20px;
+}
+
+/* --- Área de Status TCC (ATUALIZADA) --- */
+.tcc-status-wrapper, .status-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  min-width: 200px;
+}
+
+.status-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #9ca3af;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.15em;
+}
+
+/* Badge: ENVIADO (Azul, menor que antes) */
+.status-badge-sent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--blue-bg);
+  color: var(--blue-info);
+  border: 1px solid #bfdbfe;
+  padding: 8px 16px; /* Reduzido */
+  border-radius: 6px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.75rem; /* Reduzido */
+  letter-spacing: 0.05em;
+}
+
+/* Badge: Pendente (Amarelo) */
+.status-actions {
+  display: flex;
+  flex-direction: column; /* Coluna para o Pendente ficar em cima do botão */
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.status-text-pending {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #854d0e;
+  background-color: #fef9c3;
+  padding: 4px 10px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid #fde047;
+}
+
+/* Botão Enviar Comprovante (Vermelho Sólido, Menor) */
+.btn-solid-red {
+  background-color: var(--mackenzie-red);
+  color: var(--white);
+  border: none;
+  padding: 10px 20px; /* Reduzido de 14px 28px */
+  border-radius: 6px;
+  font-size: 0.75rem; /* Reduzido de 0.95rem */
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(211, 47, 47, 0.2);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.btn-solid-red:hover {
+  background-color: var(--mackenzie-dark-red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(211, 47, 47, 0.3);
+}
+
+.btn-solid-red svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Ajuste Mobile */
+@media (max-width: 768px) {
+  .status-section, .tcc-status-wrapper {
+    align-items: flex-start;
+    margin-top: 16px;
+    width: 100%;
+  }
+  
+  .status-actions {
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .btn-solid-red {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* --- Seção de Menu (Grid) --- */
+.section-title-wrapper, .menu-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.title-marker {
+  width: 6px;
+  height: 24px;
+  background-color: var(--mackenzie-red);
+  border-radius: 2px;
+}
+
+.section-title, .menu-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--text-dark);
+  letter-spacing: 0.025em;
+}
+
+.services-grid, .cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 768px) {
+  .services-grid, .cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Cartões de Serviço */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background-color: var(--white);
+  border: 1px solid var(--gray-border);
+  border-radius: 12px;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  border-color: var(--mackenzie-red);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  transform: translateY(-4px);
+}
+
+.card-top-bar, .card-bar-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background-color: var(--gray-light);
+  transition: background-color 0.3s ease;
+}
+
+.service-card:hover .card-top-bar, 
+.service-card:hover .card-bar-top {
+  background-color: var(--mackenzie-red);
+}
+
+.card-icon-wrapper, .icon-circle {
+  width: 64px;
+  height: 64px;
+  background-color: var(--gray-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  color: var(--text-gray);
+  transition: all 0.3s ease;
+}
+
+.card-icon-svg {
+  width: 32px;
+  height: 32px;
+}
+
+.service-card:hover .card-icon-wrapper, 
+.service-card:hover .icon-circle {
+  background-color: #fef2f2;
+  color: var(--mackenzie-red);
+}
+
+.card-title {
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: -0.025em;
+  transition: color 0.3s ease;
+}
+
+.service-card:hover .card-title {
+  color: var(--mackenzie-red);
+}
+
+.card-description, .card-desc {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

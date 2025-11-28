@@ -20,5 +20,10 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+export const validarTCC = async (formData) => {
+  // O axios detecta FormData e configura o Content-Type multipart/form-data automaticamente
+  const response = await api.post('/validar-tcc', formData);
+  return response.data;
+};
 
 export default api;
