@@ -60,7 +60,7 @@ def atualizar_usuario(usuario_id: int, update: UsuarioUpdate, db: Session = Depe
     # Só permite que o próprio usuário atualize seus dados
     if usuario.id != usuario_id:
         raise HTTPException(status_code=403, detail="Sem permissão")
-    updated = service_atualizar_usuario(db, usuario_id, update.dict())
+    updated = service_atualizar_usuario(db, usuario_id, update.model_dump())
     return updated
 
 

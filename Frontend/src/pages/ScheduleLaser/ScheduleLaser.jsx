@@ -24,7 +24,7 @@ const ScheduleLaser = () => {
       try {
         // 1. Busca os dados estruturados do backend
         // A função do bookingService 'getAvailableSlots' continua a mesma
-        const data = await bookingService.getAvailableSlots();
+        const data = await bookingService.getAvailableSlots('laser');
         
         // 2. Salva os dados no estado
         setApiData(data);
@@ -114,7 +114,7 @@ const ScheduleLaser = () => {
       setApiData(null); // Limpa os dados para forçar recarga
       
       // --- MUDANÇA: Re-busca os dados da API ---
-      const data = await bookingService.getAvailableSlots();
+      const data = await bookingService.getAvailableSlots('laser');
       setApiData(data);
       if (!data.dias_disponiveis || data.dias_disponiveis.length === 0) {
         setError('Nenhum horário disponível nos próximos 14 dias.');

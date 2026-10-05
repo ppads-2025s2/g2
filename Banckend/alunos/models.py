@@ -17,7 +17,7 @@ class UsuarioPublic(BaseModel):
     eh_aluno_tcc: bool  # Campo adicional para indicar se é aluno de TCC
 
     class Config:
-        orm_mode = True # Converte o modelo SQLAlchemy para Pydantic
+        from_attributes = True # Converte o modelo SQLAlchemy para Pydantic
 
 
 # Schema para atualizações (todos opcionais)

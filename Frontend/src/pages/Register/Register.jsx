@@ -6,7 +6,7 @@ import '../../styles/Form.css';
 const semesterOptions = {
   design: [3, 4, 5, 6, 7, 8, 9, 10],
   arquitetura: [3, 4, 5, 6, 7, 8, 9, 10],
-  sistemas: [1, 2, 3, 4, 5, 6, 7, 8],
+  sistemas_info: [1, 2, 3, 4, 5, 6, 7, 8],
 };
 
 const Register = () => {
@@ -41,7 +41,8 @@ const Register = () => {
       setSuccess('Cadastro realizado com sucesso! Você será redirecionado para o login.');
       setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Erro ao cadastrar. O email já pode estar em uso.');
+      const detail = err.response?.data?.detail;
+      setError(typeof detail === 'string' ? detail : 'Erro ao cadastrar. Verifique os dados informados.');
     }
   };
 
@@ -63,7 +64,7 @@ const Register = () => {
           <option value="">Selecione seu curso</option>
           <option value="design">Design</option>
           <option value="arquitetura">Arquitetura e Urbanismo</option>
-          <option value="sistemas">Sistemas de Informação</option>
+          <option value="sistemas_info">Sistemas de Informação</option>
         </select>
         <select
           name="semestre"
