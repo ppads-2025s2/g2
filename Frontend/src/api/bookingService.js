@@ -2,8 +2,9 @@ import api from './api';
 
 export const bookingService = {
   // ATUALIZADO: Pega os slots que o aluno logado PODE agendar
-  getAvailableSlots: async () => {
-    const response = await api.get('/agendamentos/disponiveis');
+  getAvailableSlots: async (type) => {
+    const tipo_maquina = type === '3d' ? 'impressora_3d' : 'laser';
+    const response = await api.get('/agendamentos/disponiveis', { params: { tipo_maquina } });
     return response.data; 
   },
 

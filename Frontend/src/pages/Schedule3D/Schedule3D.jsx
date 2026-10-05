@@ -23,7 +23,7 @@ const Schedule3D = () => {
       if (!user) return;
       try {
         // 1. Busca os dados estruturados do backend
-        const data = await bookingService.getAvailableSlots();
+        const data = await bookingService.getAvailableSlots('3d');
         
         // 2. Salva os dados no estado
         setApiData(data);
@@ -112,7 +112,7 @@ const Schedule3D = () => {
       setApiData(null); // Limpa os dados para forçar recarga
       
       // --- MUDANÇA: Re-busca os dados da API ---
-      const data = await bookingService.getAvailableSlots();
+      const data = await bookingService.getAvailableSlots('3d');
       setApiData(data);
       if (!data.dias_disponiveis || data.dias_disponiveis.length === 0) {
         setError('Nenhum horário disponível nos próximos 14 dias.');

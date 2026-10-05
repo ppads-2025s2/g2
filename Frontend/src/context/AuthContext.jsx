@@ -52,6 +52,13 @@ export const AuthProvider = ({ children }) => {
     await authService.register(userData);
   };
 
+  // Busca os dados atualizados do usuário no backend (ex: após validar o TCC)
+  const refreshUser = async () => {
+    const userData = await authService.getMe();
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('authToken');
@@ -60,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, register, logout, refreshUser, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

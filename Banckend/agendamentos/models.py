@@ -18,7 +18,7 @@ class AgendamentoPublic(BaseModel):
     usuario: UsuarioPublic # Mostra quem agendou
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 # Schema para atualizar um agendamento (todos opcionais)

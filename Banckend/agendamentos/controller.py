@@ -13,20 +13,23 @@ from agendamentos.service import (
     service_deletar_agendamento,
 )
 from auth.service import get_usuario_logado
+from entities.agendamentos import MaquinaEnum
 from entities.alunos import Usuario
 
 router = APIRouter()
 
 @router.get("/agendamentos/disponiveis")
 def get_horarios_disponiveis(
+    tipo_maquina: MaquinaEnum | None = None,
     db: Session = Depends(get_db),
     usuario: Usuario = Depends(get_usuario_logado)
 ):
     """
     (PROTEGIDO) Retorna a lista de slots vagos (horários) que o usuário logado
-    tem permissão para agendar.
+    tem permissão para agendar. Se 'tipo_maquina' for informado, considera
+    apenas os agendamentos daquela máquina.
     """
-    return service_get_horarios_disponiveis(db, usuario)
+    return service_get_horarios_disponiveis(db, usuario, tipo_maquina)
 
 
 @router.post("/agendamentos", response_model=AgendamentoPublic, status_code=status.HTTP_201_CREATED)
@@ -77,7 +80,7 @@ def obter_agendamento(agendamento_id: int, db: Session = Depends(get_db), usuari
 @router.put("/agendamentos/{agendamento_id}", response_model=AgendamentoPublic)
 def atualizar_agendamento(agendamento_id: int, update: AgendamentoUpdate, db: Session = Depends(get_db), usuario: Usuario = Depends(get_usuario_logado)):
     try:
-        ag = service_atualizar_agendamento(db, usuario, agendamento_id, update.dict())
+        ag = service_atualizar_agendamento(db, usuario, agendamento_id, update.model_dump())
         return ag
     except HTTPException as e:
         raise e

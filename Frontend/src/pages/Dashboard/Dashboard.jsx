@@ -6,11 +6,11 @@ import ModalValidacaoTCC from '../../components/ModalValidacaoTCC';
 import './Dashboard.css';
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
 
-  const handleSuccess = () => {
-    window.location.reload();
+  const handleSuccess = async () => {
+    await refreshUser();
   };
 
   const primeiroNome = user?.email ? user.email.split('@')[0] : 'Aluno';

@@ -1,6 +1,6 @@
 # Manual de Implantação - Sistema de Gerenciamento de Impressoras 3D e Corte a laser 
 
-Este documento detalha o processo de preparação do ambiente, configuração e execução da aplicação utilizando Docker.
+Este documento detalha o processo de preparação do ambiente, configuração e execução da aplicação.
 
 ## 1. Pré-requisitos (Hardware e Software)
 
@@ -14,64 +14,84 @@ Para executar o projeto, o servidor ou máquina host deve atender aos seguintes 
 ### Software Necessário
 * **Sistema Operacional:** Linux (Ubuntu 20.04+), Windows 10/11 (com WSL2) ou macOS.
 * **Git:** Para clonagem do repositório.
-* **Docker Engine:** Versão 20.10 ou superior.
+* **Docker Engine:** Versão 20.10 ou superior (no Windows/macOS, Docker Desktop).
 * **Docker Compose:** Versão 1.29 ou superior (ou plugin docker compose v2).
+* **Node.js:** Versão 18 ou superior (para rodar o frontend).
 
 ## 2. Estrutura da Aplicação
 
-A aplicação é conteinerizada e dividida em três serviços principais orquestrados pelo Docker Compose:
+A aplicação é dividida em três partes:
 
-1.  **Backend (API):** Python (Flask/FastAPI/Django) expondo endpoints REST.
-2.  **Frontend (Client):** React.js servido via Node server.
-3.  **Database:** MariaDB para persistência de dados (usuários, agendamentos, logs).
+| Serviço | Tecnologia | Como roda | Porta |
+|---|---|---|---|
+| **Database** | MariaDB 10.6 | Docker Compose (`Banckend/docker-compose.yml`) | 3306 |
+| **Backend (API)** | Python + FastAPI | Docker Compose (`Banckend/docker-compose.yml`) | 8000 |
+| **Frontend** | React + Vite | `npm run dev` na pasta `Frontend` | 5173 |
 
 ## 3. Configuração de Variáveis de Ambiente
 
-Antes de iniciar, é necessário configurar as variáveis de ambiente.
+O backend lê suas configurações do arquivo `Banckend/.env` (que não é versionado).
 
-1.  Na raiz do projeto, duplique o arquivo `.env.example` e renomeie para `.env`.
-2.  Edite o arquivo `.env` com as configurações de produção/desenvolvimento:
+1. Dentro da pasta `Banckend`, copie o arquivo `.env.example` para `.env`.
+2. Edite o `.env`:
 
+```env
+# Conexão com o MariaDB (host "db-mariadb" é o nome do serviço no docker-compose.yml)
+DB_STRING=mysql+mysqlconnector://app_user:python123@db-mariadb:3306/imimpressoras_db
 
-# Configuração do Banco de Dados (MariaDB)
-DB_ROOT_PASSWORD=senha_super_secreta_root
-DB_DATABASE=impressoras_db
-DB_USER=app_user
-DB_PASSWORD=senha_usuario_app
-DB_HOST=db_service
+# Chave usada para assinar os tokens JWT
+SECRET_KEY=troque-por-uma-chave-aleatoria
 
-# Backend Python
-SECRET_KEY=sua_chave_criptografica_aqui
-API_PORT=8000
-ALLOWED_HOSTS=localhost,127.0.0.1
+SALT=troque-por-um-valor-qualquer
+```
 
-# Frontend React
-REACT_APP_API_URL=http://localhost:8000
+* O usuário, a senha e o nome do banco em `DB_STRING` devem bater com os valores de `Banckend/docker-compose.yml`.
+* Para gerar uma `SECRET_KEY` segura: `python -c "import secrets; print(secrets.token_hex(32))"`
 
-Procedimento de Instalação e Execução
-Clonar repositório 
-git clone [https://github.com/seu-grupo/gerenciador-impressao-3d.git](https://github.com/seu-grupo/sistema_gerenciamento.git)
-cd  sistema_gerenciamento
+## 4. Procedimento de Instalação e Execução
 
-Construir e Iniciar os Containers
-o comando do Docker Compose para baixar as imagens, construir o código e subir os serviços.
-# Para rodar em primeiro plano (ver logs no terminal)
+### 4.1 Clonar o repositório
+```bash
+git clone <url-do-repositorio>
+cd g2
+```
+
+### 4.2 Subir o banco de dados e o backend
+Com o Docker em execução, a partir da pasta `Banckend`:
+
+```bash
+cd Banckend
+
+# Em primeiro plano (ver logs no terminal)
 docker-compose up --build
 
-# Para rodar em background (modo detached)
+# Ou em background
 docker-compose up -d --build
+```
 
-Migrações de Banco de Dados
-é necessário criar as tabelas no MariaDB
-docker-compose exec backend python manage.py migrate
-# OU se usar Alembic/SQLAlchemy
-docker-compose exec backend alembic upgrade head
+As tabelas do banco são criadas automaticamente quando o backend inicia (`Base.metadata.create_all` em `main.py`); não é necessário rodar migrações.
 
-Verificação de Funcionamento
-Frontend: Acesse http://localhost:3000 (ou a porta configurada). A tela de login deve aparecer.
-Backend: Acesse http://localhost:8000/health (ou /docs se usar Swagger) para verificar se a API responde.
-Banco de Dados: Verifique se os logs do container db indicam "ready for connections".
+> Na primeira execução o backend pode reiniciar algumas vezes enquanto o MariaDB termina de inicializar. Isso é esperado: o container está configurado com `restart: unless-stopped` e conecta assim que o banco fica pronto.
 
-Troubleshooting Comum
-Erro de Conexão com Banco: Verifique se as credenciais no .env batem com as do docker-compose.yml
-Porta em uso: Certifique-se que as portas 3000, 8000 e 3306 não estão ocupadas por outros serviços no host.
+### 4.3 Rodar o frontend
+Em outro terminal, a partir da raiz do projeto:
+
+```bash
+cd Frontend
+npm install     # apenas na primeira vez
+npm run dev
+```
+
+O frontend acessa a API em `http://127.0.0.1:8000/api` (configurado em `Frontend/src/api/api.js`).
+
+## 5. Verificação de Funcionamento
+
+* **Frontend:** acesse http://localhost:5173. A tela de login deve aparecer.
+* **Backend:** acesse http://localhost:8000/api (deve responder `API online e funcionando!`) ou http://localhost:8000/docs para a documentação Swagger.
+* **Banco de Dados:** os logs do container `printer_db_manager` devem indicar "ready for connections" (`docker logs printer_db_manager`).
+
+## 6. Troubleshooting Comum
+
+* **Backend não inicia / erro de conexão com o banco:** confira se o arquivo `Banckend/.env` existe e se a `DB_STRING` bate com as credenciais do `docker-compose.yml`. Veja os logs com `docker logs printer_app_backend`.
+* **Erro de CORS no navegador:** a API só aceita requisições de `http://localhost:5173`. Acesse o frontend por esse endereço (e não por `127.0.0.1:5173`), ou adicione a origem na lista `origins` em `Banckend/main.py`.
+* **Porta em uso:** certifique-se de que as portas 5173, 8000 e 3306 não estão ocupadas por outros serviços no host (ex: um MySQL/MariaDB local usando a 3306).

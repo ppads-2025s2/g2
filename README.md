@@ -23,24 +23,41 @@ Sistema desenvolvido para facilitar o agendamento e gerenciamento do uso de equi
 
 ### Pré-requisitos
 - Docker e Docker Desktop instalados.
+- Node.js 18+ instalado.
 - Git instalado.
 
-## Containers com Docker Compose:
+### 1. Configurar o backend
+Dentro da pasta `Banckend`, copie o `.env.example` para `.env` e ajuste a `SECRET_KEY`.
+
+### 2. Subir o banco de dados e a API (Docker Compose)
+```bash
+cd Banckend
 docker-compose up --build
+```
 
-## Acesso da aplicação:
-rontend (Sistema): (http://localhost:5173/) (ou a porta que você configurou)
+### 3. Rodar o frontend
+Em outro terminal:
+```bash
+cd Frontend
+npm install
+npm run dev
+```
 
-Documentação da API (Swagger): [http://localhost:8000/docs](http://127.0.0.1:8000/docs)
+Mais detalhes em [docs/manual-implantacao.md](docs/manual-implantacao.md).
 
-A API possui documentação automática via Swagger UI. Após rodar o projeto
+## Acesso da aplicação
+- **Frontend (Sistema):** [http://localhost:5173](http://localhost:5173)
+- **Documentação da API (Swagger):** [http://localhost:8000/docs](http://localhost:8000/docs)
 
-Principais Endpoints:
+## Principais Endpoints
 
-POST /api/login: Autenticação.
-
-POST /api/registrar: Cadastro de novos usuários.
-
-GET /api/agendamentos/disponiveis: Verifica horários livres.
-
-POST /api/agendamentos: Cria uma nova reserva.
+| Método | Rota | Descrição |
+|---|---|---|
+| POST | `/api/login` | Autenticação (retorna token JWT) |
+| POST | `/api/registrar` | Cadastro de novos usuários |
+| GET | `/api/usuarios/eu` | Dados do usuário logado |
+| POST | `/api/validar-tcc` | Envio do CSV de comprovação de TCC |
+| GET | `/api/agendamentos/disponiveis?tipo_maquina=` | Horários livres para a máquina (`impressora_3d` ou `laser`) |
+| POST | `/api/agendamentos` | Cria uma nova reserva |
+| GET | `/api/meus_agendamentos` | Reservas do usuário logado |
+| DELETE | `/api/agendamentos/{id}` | Cancela uma reserva |
